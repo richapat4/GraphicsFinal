@@ -1,0 +1,78 @@
+#version 330 core
+#extension GL_ARB_separate_shader_objects : enable
+#define MAX_LIGHT_COUNT 8
+
+//Reference : Title: <pyopengl/09 - Advanced Materials>
+//Author:  Andrew Mengede
+//Date: September 2022
+//Code version: <a7f8f1b5f50370bf732dd730c3ac383e4750389>
+//Availability: <https://github.com/amengede/getIntoGameDev/tree/main/pyopengl/09%20-%20Advanced%20Materials/finished> 
+
+
+struct Material {
+    sampler2D albedo;
+    sampler2D ao;
+    sampler2D normal;
+    sampler2D specular;
+};
+
+struct Light {
+    vec3 color;
+    float strength;
+};
+
+uniform Material material;
+uniform Light lights[MAX_LIGHT_COUNT];
+uniform vec3 ambient;
+
+layout (location=0) in vec3 fragmentPos;
+layout (location=1) in vec2 fragmentTexCoord;
+layout (location=2) in float fragmentLightCount;
+layout (location=3) in vec3 fragmentViewPos;
+layout (location=4) in vec3 fragmentLightPos[MAX_LIGHT_COUNT];
+
+
+
+layout (location=0) out vec4 color;
+
+
+
+
+vec3 CalculatePointLight(Light light, vec3 cameraPosition, vec3 fragmentPosition, vec3 lightPos, vec3 normal, 
+Material fragmentMaterial, vec2 texCoord) {
+    vec3 result = vec3(0.0);
+
+    //directions
+    vec3 norm = normalize(normal);
+	vec3 lightDist = normalize(lightPos - fragmentPosition);
+    vec3 viewDist = normalize(cameraPosition - fragmentPosition);
+    vec3 halfDist = normalize(lightDist + viewDist);
+
+    //diffuse
+	result += light.color * max(0.0,dot(norm,lightDist)) * vec3(texture(fragmentMaterial.albedo, texCoord));
+	
+    //specular
+    result += light.color * light.strength * pow(max(dot(normal, halfDist), 0.0),32) * vec3(texture(fragmentMaterial.specular, texCoord));
+    
+    return result;
+}
+
+
+
+void main()
+{
+    vec3 lightLevel = vec3(0.0);
+
+    vec3 normal = -normalize(vec3(1.0) - 2.0 * texture(material.normal, fragmentTexCoord).xyz);
+    float alpha = texture(material.albedo, fragmentTexCoord).a;
+
+    //ambient
+    lightLevel += ambient * vec3(texture(material.albedo, fragmentTexCoord));
+
+    for (int i = 0; i < fragmentLightCount; i++) {
+        float distance = length(fragmentLightPos[i] - fragmentPos);
+        lightLevel += CalculatePointLight(lights[i], fragmentViewPos, fragmentPos, fragmentLightPos[i], normal, material, fragmentTexCoord) / distance;
+    }
+    
+    color = vec4(lightLevel, 1.0) * texture(material.ao, fragmentTexCoord);
+}

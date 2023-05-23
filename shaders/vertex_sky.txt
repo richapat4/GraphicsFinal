@@ -1,0 +1,23 @@
+#version 330 core
+
+layout (location=0) in vec2 vertexPos;
+
+
+//Reference : Title: <computerGraphicsPracs
+//Prac4 - Textures Cubemaps and Lighting>
+//Author:  Andrew Mengede
+//Date: May 2023
+//Code version: <b37f2baa93d67bf6b09d0a377f3c220a13811dec>
+//Availability: <https://github.com/amengede/computerGraphicsPracs/tree/main/Prac4%20-%20Textures%20Cubemaps%20and%20Lighting>
+
+uniform vec3 camera_forwards;
+uniform vec3 camera_right;
+uniform vec3 camera_up;
+
+out vec3 rayDirection;
+
+void main()
+{
+    gl_Position = vec4(vertexPos, 0.0, 1.0);
+    rayDirection = camera_forwards + vertexPos.x * camera_right + vertexPos.y * camera_up;
+}

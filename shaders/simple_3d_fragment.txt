@@ -1,0 +1,28 @@
+#version 330 core
+#extension GL_ARB_separate_shader_objects : enable
+
+//Reference : Title: <computerGraphicsPracs
+//Prac4 - Textures Cubemaps and Lighting>
+//Author:  Andrew Mengede
+//Date: May 2023
+//Code version: <b37f2baa93d67bf6b09d0a377f3c220a13811dec>
+//Availability: <https://github.com/amengede/computerGraphicsPracs/tree/main/Prac4%20-%20Textures%20Cubemaps%20and%20Lighting>
+
+
+layout(location = 0) in vec3 fragPos;
+layout(location = 1) in vec2 fragTexCoord;
+layout(location = 2) in vec3 fragNormal;
+
+out vec4 color;
+const vec4 sunColor = vec4(1.0, 1.0, 1.0, 1.0);
+const vec3 sunDirection = normalize(vec3(1.0, 1.0, -1.0));
+const vec3 fragmentColor = vec3(1.0, 1.0, 1.0);
+
+void main()
+{
+    // Return pixel colour
+    color = sunColor * max(0.0, dot(fragNormal, -1.0 * sunDirection)) * vec4(fragmentColor, 1.0);
+    
+}
+
+

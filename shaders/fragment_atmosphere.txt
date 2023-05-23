@@ -1,0 +1,24 @@
+#version 330 core
+
+in vec2 fragmentTexCoord;
+in vec3 fragNormal;
+
+//Reference : Title: <computerGraphicsPracs
+//Prac4 - Textures Cubemaps and Lighting>
+//Author:  Andrew Mengede
+//Date: May 2023
+//Code version: <b37f2baa93d67bf6b09d0a377f3c220a13811dec>
+//Availability: <https://github.com/amengede/computerGraphicsPracs/tree/main/Prac4%20-%20Textures%20Cubemaps%20and%20Lighting>
+
+
+uniform sampler2D atmosTexture;
+
+out vec4 color;
+const vec4 sunColor = vec4(1.0, 1.0, 1.0, 1.0);
+const vec3 sunDirection = normalize(vec3(1.0, -1.0, -1.0));
+const vec3 fragmentColor = vec3(1.0, 1.0, 1.0);
+void main()
+{
+    color = sunColor * max(0.0, dot(fragNormal, -1.0 * sunDirection))  * vec4(fragmentColor,1.0) * texture(atmosTexture, fragmentTexCoord);
+    color.a = 0.5;
+}
