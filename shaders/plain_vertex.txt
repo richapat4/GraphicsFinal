@@ -1,21 +1,38 @@
 #version 330 core
+#extension GL_ARB_separate_shader_objects : enable
+
+//Reference : Title: <computerGraphicsPracs
+//Prac4 - Textures Cubemaps and Lighting>
+//Author:  Andrew Mengede
+//Date: May 2023
+//Code version: <b37f2baa93d67bf6b09d0a377f3c220a13811dec>
+//Availability: <https://github.com/amengede/computerGraphicsPracs/tree/main/Prac4%20-%20Textures%20Cubemaps%20and%20Lighting>
+
 
 layout (location=0) in vec3 vertexPos;
-layout (location=1) in vec3 vertexColor;
+layout (location=1) in vec2 texCoord;
+layout (location=2) in vec3 vertNormal;
+
+//Reference : Title: <computerGraphicsPracs
+//Prac4 - Textures Cubemaps and Lighting>
+//Author:  Andrew Mengede
+//Date: May 2023
+//Code version: <b37f2baa93d67bf6b09d0a377f3c220a13811dec>
+//Availability: <https://github.com/amengede/computerGraphicsPracs/tree/main/Prac4%20-%20Textures%20Cubemaps%20and%20Lighting>
+
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-out vec3 fragmentColor;
+out vec3 fragPos;
+out vec2 fragTexCoord;
+out vec3 fragNormal;
 
 void main()
 {
-    //TODO: apply the projection transform to get the position from
-    //  world space to screen space
     gl_Position = projection * view * model * vec4(vertexPos, 1.0);
-    fragmentColor = vertexColor;
+    fragPos = vertexPos;
+    fragTexCoord = texCoord;
+    fragNormal = vertNormal;
 }
-
-
-

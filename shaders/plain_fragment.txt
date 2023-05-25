@@ -1,12 +1,17 @@
 #version 330 core
 
-in vec3 fragmentColor;
+in vec3 fragPos;
+in vec2 fragTexCoord;
+in vec3 fragNormal;
 
 out vec4 color;
+const vec4 sunColor = vec4(1.0, 1.0, 1.0, 1.0);
+const vec3 sunDirection = normalize(vec3(1.0, -1.0, -1.0));
+const vec3 fragmentColor = vec3(1.0, 1.0, 1.0);
 
 void main()
 {
-    color = vec4(fragmentColor, 1.0);
+    // Return pixel colour
+    color = sunColor * max(0.0, dot(fragNormal, -1.0 * sunDirection)) * vec4(fragmentColor, 1.0);
+    
 }
-
-
