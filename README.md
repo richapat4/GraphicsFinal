@@ -1,6 +1,11 @@
-﻿# GraphicsProject
+﻿# Graphics Project - Satellite Motion and Orbital Debris
+ 
+ ### Results - Blender 
+ -    blender/results/AnimationFinal.mp4 
+ Added blender zip files for modules for final animation
+ 
 
-### File Structure 
+### Results - OpenGL
 -     plain_mapping.py - basic shader with directional light
       basic_texture_map_sunlight.py - basic shader with texture and directional light
       normal_mapping_with_point_lights.py - advanced textures with point lighting
